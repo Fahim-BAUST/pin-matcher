@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="generate-btn" class="form-control" type="text">
+                    <button onclick="generatePin()" class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input id="text-view" class="form-control" type="text">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div onclick="addText(7)" class="button">7</div>
+                              <div onclick="addText(8)" class="button">8</div>
+                              <div onclick="addText(9)" class="button">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div onclick="addText(4)" class="button">4</div>
+                              <div onclick="addText(5)" class="button">5</div>
+                              <div onclick="addText(6)" class="button">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div onclick="addText(1)" class="button">1</div>
+                              <div onclick="addText(2)" class="button">2</div>
+                              <div onclick="addText(3)" class="button">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div onclick="backSpace()" class="button"><</div>
+                                <div onclick="addText(0)" class="button">0</div>
+                                <div onclick="removeAll()" class="button">C</div>
+                            </div>
+                            <div>
+                                <button id="submit-button" onclick="evaluation()" type="submit" class="submit-btn">Submit</button>
+                                <p id="no-try-left" class="action-left"><span id="try-left">3</span> try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p id="un-matched" class="notify">❌ Pin Didn't Match, Please try again</p>
+            <p id="matched" class="notify">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+
+
+    <script>
+        function generatePin() {
+            var a = Math.floor(100000 + Math.random() * 900000)
+            a = a.toString().substring(0, 4);
+            document.getElementById("generate-btn").value=a;
+            document.getElementById("matched").style.display="none";
+            document.getElementById("un-matched").style.display="none";
+            document.getElementById("text-view").value="";
+        }
+        function addText(valueButton) {
+
+            let updateValue = document.getElementById("text-view").value;
+
+            updateValue=updateValue+valueButton;
+            document.getElementById("text-view").value=updateValue;
+
+        }
+
+        function evaluation() {
+            let textValue= document.getElementById("text-view").value;
+            let tryLeft=document.getElementById("try-left").innerText;
+            tryLeft=parseInt(tryLeft);
+            if(textValue)
+            {
+                const generatePin=document.getElementById("generate-btn").value;
+                if(generatePin==textValue)
+                {
+                    document.getElementById("matched").style.display="block";
+                    document.getElementById("un-matched").style.display="none";
+                }
+                else
+                {
+                    
+                    document.getElementById("un-matched").style.display="block";
+                    document.getElementById("matched").style.display="none";
+                    document.getElementById("try-left").innerText=tryLeft-1;
+                    if(tryLeft<2){
+                        document.getElementById("submit-button").disabled=true;
+                        document.getElementById("no-try-left").innerText="You can't try again";
+                    }
+                    
+                }
+                
+            }
+            else
+            {
+                console.log(alert("Enter pin to Access"));
+            }
+
+        }
+
+        function removeAll() {
+
+            document.getElementById("text-view").value="";
+        }
+
+        function backSpace() 
+        {
+            let textValue =document.getElementById("text-view").value;
+            document.getElementById("text-view").value=textValue.substring(0,textValue.length-1);
+        }
+
+        
+    </script>
+</body>
+</html>
